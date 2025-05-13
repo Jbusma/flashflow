@@ -8,19 +8,18 @@ Sapphire Rapids, AMD Genoa) with AVX-512 / AVX2 SIMD throughout.
 
 ## Vision
 
-1. **Wire-to-wire < 3 µs @ 64-byte packets** inside a Chicago or
-   LD4/FR2 colo rack—NIC timestamp to user-land order-book delta.
-2. **Deterministic back-testing**—replay every market data packet and
-   every IOC/FOK you ever sent. Zero drift between live and sim paths.
-3. **Pluggable gateways**—Binance **and** Coinbase live today;  
-   Deribit, CME MDP3 (FIX/FAST) and BitMEX multicast are on the roadmap.
-4. **One binary, multiple personalities**—engine, simulator, latency
-   harness, even Wireshark dissector, all sharing the same decode path.
-5. **Everything hot stays in L1**—a compact 8-byte _Level_  
-   (32-bit price tick, 32-bit qty) lets us track up to **depth-500 per side**
-   (≈ 16 KiB bids + 16 KiB asks) and still fit inside the 32 KiB L1-D cache
-   of Sapphire Rapids. Depth-1000 remains available for research, at the
-   cost of spilling into L2.
+1. **Wire-to-wire < 3 µs @ 64-byte packets** – NIC timestamp to user-land
+   order-book delta in a Chicago or LD4/FR2 colo rack.  
+2. **Deterministic back-testing** – replay every market-data packet and
+   every IOC/FOK you ever sent with zero drift.  
+3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit,
+   CME MDP3 (FIX/FAST) and BitMEX multicast are on the roadmap.  
+4. **One binary, multiple personalities** – engine, simulator, latency
+   harness, even Wireshark dissector, all on the same decode path.  
+5. **Everything hot stays in L1** – a compact 8-byte _Level_ (32-bit price
+   tick, 32-bit qty) lets us track **depth-500 per side** (≈16 KiB bids +
+   16 KiB asks) inside the 32 KiB L1-D of Sapphire Rapids; depth-1000 is
+   available for research at the cost of spilling into L2.
 
 ---
 
@@ -81,7 +80,7 @@ cmake --build build -j$(nproc)
 
 ---
 
-## Micro-benchmarks (Google Benchmark)
+## Micro-benchmarks
 
 These tests focus purely on nanosecond latency, not correctness.
 
