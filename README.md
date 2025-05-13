@@ -11,11 +11,11 @@ Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Geno
    order-book delta in a Chicago or LD4/FR2 colo rack.  
 2. **Deterministic back-testing** – replay every market-data packet and
    every IOC/FOK you ever sent with zero drift.  
-3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit,
-   CME MDP3 (FIX/FAST) and BitMEX multicast are on the roadmap.  
-4. **Zero code-path divergence** – the same parser & book-update logic
-   drives live trading, back-testing and latency benchmarks; no
-   “test-only” branches to drift out of sync.  
+3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit
+   and BitMEX multicast are on the roadmap.  
+4. **Single code-base, multiple front-ends** – live trading, back-testing,
+   latency harnesses and packet-inspection tools all link the same core
+   library; no test-only branches that drift out of sync.  
 5. **Everything hot stays in L1** – a compact 8-byte _Level_ (32-bit price
    tick, 32-bit qty) keeps **depth-500 per side** (≈16 KiB bids + 16 KiB
    asks) within the 32 KiB L1-D of Sapphire Rapids; depth-1000 is still
@@ -38,7 +38,7 @@ Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Geno
 
 ## Hardware assumptions
 
-* Sapphire Rapids (AVX-512, PCIe 5.0) or 4th-gen EPYC (“Genoa”)
+* Sapphire Rapids (AVX-512, PCIe 5.0) or 4th-gen EPYC ("Genoa")
 * ConnectX-6 Dx or Intel 800-Series NIC (Rx hardware timestamping)
 * Core isolation + `isolcpus`, `nohz_full`, `rcu_nocbs` boot params
 * Jumbo disabled—64/128-byte packets stress the fast path
@@ -108,7 +108,7 @@ Chronograf dashboards and catch performance regressions in CI.
 
 ## Roadmap
 
-* CME Group MDP3 multicast decoder (FIX/FAST, half-bandwidth SIMD FAST)
+* CME Group MDP 3 multicast decoder (FIX/FAST) for BTC/ETH futures
 * eBPF kernel probes for IRQ-to-user latency heat-maps
 * CUDA-accelerated basket VWAP & TWAP
 * On-NIC book building (P4 switch/Nvidia DOCA experiment)
