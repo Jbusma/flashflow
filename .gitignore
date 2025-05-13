@@ -1,0 +1,33 @@
+# build artifacts
+/build/
+/cmake-build*/          # CLion / VS Code default
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Testing/
+CTestTestfile.cmake
+Makefile
+compile_commands.json
+install_manifest.txt
+
+# package managers
+.vcpkg_installed/
+conan.lock
+
+# IDE / tooling
+.vscode/
+.idea/
+.clangd/
+
+# misc
+*.log
+*.gz
+.DS_Store 

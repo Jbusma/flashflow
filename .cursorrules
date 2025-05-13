@@ -1,0 +1,31 @@
+# How Cursor should post-process code-blocks
+shell:
+  join_with: " && "
+  strip_comments: true
+
+bash:
+  join_with: " && "
+  strip_comments: true
+
+# Handy one-liners you can reference in future answers
+templates:
+  build_and_test_all: >
+    rm -rf build &&
+    cmake -S . -B build -DBUILD_TESTING=ON > /dev/null &&
+    cmake --build build --parallel 8 -- -s > /dev/null &&
+    ctest --test-dir build
+
+  build_and_test_binance: >
+    rm -rf build &&
+    cmake -S . -B build -DBUILD_TESTING=ON > /dev/null &&
+    cmake --build build --parallel 8 -- -s > /dev/null &&
+    ctest --test-dir build &&
+    ctest --test-dir build -R binance
+
+  git_init_push: >
+    git init &&
+    git add -A &&
+    git commit -m "feat: initial flashflow import (tests passing)" &&
+    git branch -M main &&
+    git remote add origin git@github.com:<your-handle>/flashflow.git &&
+    git push -u origin main 
