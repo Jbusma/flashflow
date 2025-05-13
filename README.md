@@ -1,8 +1,7 @@
 # flashflow
 
 _Colo-grade crypto-market gateway & matching-engine sandbox._  
-Built from scratch for sub-µs determinism on modern x86 hardware (Intel
-Sapphire Rapids, AMD Genoa) with AVX-512 / AVX2 SIMD throughout.
+Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Genoa, AVX-512 & AVX2).
 
 ---
 
@@ -14,12 +13,13 @@ Sapphire Rapids, AMD Genoa) with AVX-512 / AVX2 SIMD throughout.
    every IOC/FOK you ever sent with zero drift.  
 3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit,
    CME MDP3 (FIX/FAST) and BitMEX multicast are on the roadmap.  
-4. **One binary, multiple personalities** – engine, simulator, latency
-   harness, even Wireshark dissector, all on the same decode path.  
+4. **Zero code-path divergence** – the same parser & book-update logic
+   drives live trading, back-testing and latency benchmarks; no
+   “test-only” branches to drift out of sync.  
 5. **Everything hot stays in L1** – a compact 8-byte _Level_ (32-bit price
-   tick, 32-bit qty) lets us track **depth-500 per side** (≈16 KiB bids +
-   16 KiB asks) inside the 32 KiB L1-D of Sapphire Rapids; depth-1000 is
-   available for research at the cost of spilling into L2.
+   tick, 32-bit qty) keeps **depth-500 per side** (≈16 KiB bids + 16 KiB
+   asks) within the 32 KiB L1-D of Sapphire Rapids; depth-1000 is still
+   available for research (L2 hits).
 
 ---
 
@@ -103,9 +103,6 @@ Chronograf dashboards and catch performance regressions in CI.
   cmake --build build --parallel 8 -- -s > /dev/null &&
   ctest --test-dir build
   ```
-
-* **Google Benchmark** micro-benchmarks (`/bench`) stream results straight
-  into InfluxDB; dashboards live in `/tools/chronograf`.
 
 ---
 
