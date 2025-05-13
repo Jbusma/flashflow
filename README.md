@@ -8,7 +8,7 @@ Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Geno
 ## Vision
 
 1. **Wire-to-wire < 3 µs @ 64-byte packets** – NIC timestamp to user-land
-   order-book delta in a Chicago or LD4/FR2 colo rack.  
+   order-book delta in any colo rack.  
 2. **Deterministic back-testing** – replay every market-data packet and
    every IOC/FOK you ever sent with zero drift.  
 3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit
