@@ -23,6 +23,24 @@ Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Geno
 
 ---
 
+## Current status (alpha)
+
+What **already works**  
+* Binance spot feed (WebSocket `depth` / `depth@100ms`).  
+* Lock-free, single-symbol order-book (depth-500) with full unit-test coverage.  
+* Deterministic pcap / gz replay driver for back-testing.  
+* Latency harness that replays a 1 M pkt/s synthetic stream and records TSC deltas.  
+* Builds and runs on Linux (≥ Ubuntu 22.04) with GCC 14 / Clang 17 on x86-64 AVX2+ CPUs.
+
+Known **limitations**  
+* _Read-only_ for now – no order submission / FIX gateway; Coinbase feed still in development.  
+* Hot path is single-core, single-symbol; no multi-symbol sharding yet.  
+* Benchmarks must be run manually; CI perf-regression guard not wired.  
+* Persistence (ZSTD capture) is optional and disabled by default.  
+* Untested on ARM / Apple silicon; requires AVX2 at minimum.
+
+---
+
 ## Architectural highlights
 
 | Layer | What we do | Why it matters in colo |
@@ -90,24 +108,6 @@ cmake --build build-bench --parallel 8 -- -s &&
 
 Run with `--benchmark_format=json` to pipe results into InfluxDB /
 Chronograf dashboards and catch performance regressions in CI.
-
----
-
-## Current status (alpha)
-
-What **already works**  
-* Binance spot feed (WebSocket `depth` / `depth@100ms`).  
-* Lock-free, single-symbol order-book (depth-500) with full unit-test coverage.  
-* Deterministic pcap / gz replay driver for back-testing.  
-* Latency harness that replays a 1 M pkt/s synthetic stream and records TSC deltas.  
-* Builds and runs on Linux (≥ Ubuntu 22.04) with GCC 14 / Clang 17 on x86-64 AVX2+ CPUs.
-
-Known **limitations**  
-* _Read-only_ for now – no order submission / FIX gateway; Coinbase feed still in development.  
-* Hot path is single-core, single-symbol; no multi-symbol sharding yet.  
-* Benchmarks must be run manually; CI perf-regression guard not wired.  
-* Persistence (ZSTD capture) is optional and disabled by default.  
-* Untested on ARM / Apple silicon; requires AVX2 at minimum.
 
 ---
 
