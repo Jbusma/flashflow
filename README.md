@@ -11,8 +11,8 @@ Sub-µs deterministic C++ targeting modern x86 (Intel Sapphire Rapids / AMD Geno
    order-book delta in any colo rack.  
 2. **Deterministic back-testing** – replay every market-data packet and
    every IOC/FOK you ever sent with zero drift.  
-3. **Pluggable gateways** – Binance **and** Coinbase live today; Deribit
-   and BitMEX multicast are on the roadmap.  
+3. **Pluggable gateways** – Binance live today; Coinbase, Deribit and
+   BitMEX multicast are on the roadmap.  
 4. **Single code-base, multiple front-ends** – live trading, back-testing,
    latency harnesses and packet-inspection tools all link the same core
    library; no test-only branches that drift out of sync.  
@@ -76,8 +76,6 @@ cmake --build build -j$(nproc)
 ./build/bin/flashflow --config etc/binance_demo.yml
 ~~~
 
-
-
 ---
 
 ## Micro-benchmarks
@@ -92,6 +90,24 @@ cmake --build build-bench --parallel 8 -- -s &&
 
 Run with `--benchmark_format=json` to pipe results into InfluxDB /
 Chronograf dashboards and catch performance regressions in CI.
+
+---
+
+## Current status (alpha)
+
+What **already works**  
+* Binance spot feed (WebSocket `depth` / `depth@100ms`).  
+* Lock-free, single-symbol order-book (depth-500) with full unit-test coverage.  
+* Deterministic pcap / gz replay driver for back-testing.  
+* Latency harness that replays a 1 M pkt/s synthetic stream and records TSC deltas.  
+* Builds and runs on Linux (≥ Ubuntu 22.04) with GCC 14 / Clang 17 on x86-64 AVX2+ CPUs.
+
+Known **limitations**  
+* _Read-only_ for now – no order submission / FIX gateway; Coinbase feed still in development.  
+* Hot path is single-core, single-symbol; no multi-symbol sharding yet.  
+* Benchmarks must be run manually; CI perf-regression guard not wired.  
+* Persistence (ZSTD capture) is optional and disabled by default.  
+* Untested on ARM / Apple silicon; requires AVX2 at minimum.
 
 ---
 
