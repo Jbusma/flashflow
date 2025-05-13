@@ -12,8 +12,8 @@ Sapphire Rapids, AMD Genoa) with AVX-512 / AVX2 SIMD throughout.
    LD4/FR2 colo rack—NIC timestamp to user-land order-book delta.
 2. **Deterministic back-testing**—replay every market data packet and
    every IOC/FOK you ever sent. Zero drift between live and sim paths.
-3. **Pluggable gateways**—Binance, Coinbase, Deribit live today;
-   CME MDP3 (FIX/FAST) and BitMEX multicast up next.
+3. **Pluggable gateways**—Binance **and** Coinbase live today;  
+   Deribit, CME MDP3 (FIX/FAST) and BitMEX multicast are on the roadmap.
 4. **One binary, multiple personalities**—engine, simulator, latency
    harness, even Wireshark dissector, all sharing the same decode path.
 5. **Everything hot stays in L1**—a compact 8-byte _Level_  
@@ -60,8 +60,6 @@ Sapphire Rapids, AMD Genoa) with AVX-512 / AVX2 SIMD throughout.
 | User callback / strategy  |    <50 |
 | **Total**                 | **≈ 655 ns** |
 
-Numbers measured on 2.0 GHz Sapphire Rapids ES, kernel 6.8-rc, `turbo=0`.
-
 ---
 
 ## Quick start
@@ -79,8 +77,22 @@ cmake --build build -j$(nproc)
 ./build/bin/flashflow --config etc/binance_demo.yml
 ~~~
 
-All command blocks comply with `.cursorrules`; you can run them with one
-click in Cursor.
+
+
+---
+
+## Micro-benchmarks (Google Benchmark)
+
+These tests focus purely on nanosecond latency, not correctness.
+
+```bash
+cmake -B build-bench -DCMAKE_BUILD_TYPE=Release -DFLASHFLOW_BUILD_BENCH=ON &&
+cmake --build build-bench --parallel 8 -- -s &&
+./build-bench/apps/ff_bench
+```
+
+Run with `--benchmark_format=json` to pipe results into InfluxDB /
+Chronograf dashboards and catch performance regressions in CI.
 
 ---
 
@@ -104,16 +116,6 @@ click in Cursor.
 * eBPF kernel probes for IRQ-to-user latency heat-maps
 * CUDA-accelerated basket VWAP & TWAP
 * On-NIC book building (P4 switch/Nvidia DOCA experiment)
-
----
-
-## Contributing
-
-Low-latency patches welcome—guidelines:
-
-1. `clang-format` (LLVM) before committing.  
-2. Functions ≤ 40 lines (hot path ≤ 15).  
-3. Uphold the latency budget; include `bench/` proof if you improve it.  
 
 ---
 
