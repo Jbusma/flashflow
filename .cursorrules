@@ -15,6 +15,8 @@
 #       • join lines with " && "
 #       • strip inline comments
 #     so any multi-line shell snippet turns into a one-click command.
+#  6. Do NOT put comment lines (# …) inside runnable ```bash blocks;
+#     they stop Cursor from showing the "Run" button.
 # ────────────────────────────────────────────────────────────────────────────────
 
 shell:
@@ -50,5 +52,9 @@ templates:
     git add -A &&
     git commit -m "feat: initial flashflow import (tests passing)" &&
     git branch -M main &&
-    git remote add origin git@github.com:jbusma/flashflow.git &&
-    git push -u origin main 
+    git remote add origin git@github.com:Jbusma/flashflow.git &&
+    git push -u origin main
+
+  # ── Create repo on GitHub via gh-cli and push ───────────────────────────────
+  gh_repo_create_push: >
+    gh repo create Jbusma/flashflow --public --source . --remote origin --push 
